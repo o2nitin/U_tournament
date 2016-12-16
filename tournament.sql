@@ -12,4 +12,8 @@ CREATE TABLE players (
         name varchar (25) NOT NULL
 );
 
-
+CREATE TABLE matches (
+        m_id serial PRIMARY KEY,
+        winner integer REFERENCES players(p_id) NOT NULL,
+        loser integer REFERENCES players(p_id) NOT NULL
+);
