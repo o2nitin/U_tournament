@@ -13,7 +13,7 @@ def connect():
         cursor = db_connect.cursor()
         return db_connect, cursor
     except psycopg2.Error:
-        print "Cannot db_connect to database"
+        print "database connection error"
    
 
 
@@ -38,11 +38,11 @@ def deletePlayers():
 def countPlayers():
     """Returns the number of players currently registered."""
     db_connect, cursor = connect()
-    query = ("SELECT count(players.p_id) AS player_count FROM players;")
+    query = ("SELECT count(players.p_id) AS players_count FROM players;")
     cursor.execute(query)
     player_count = cursor.fetchone()[0]
     db_connect.close()
-    return player_count
+    return players_count
 
 
 def registerPlayer(name):
@@ -114,21 +114,21 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """ 
-    pair = []
+    swisspair = []
     db_connect, cursor = connect()
     query = ("SELECT p_id, name \
                 FROM standings ORDER BY total_wins DESC;")
     cursor.execute(query)
-    win_pair_list = cursor.fetchall()
+    wpair_list = cursor.fetchall()
 
-    if len(win_pair_list) % 2 == 0:
-        for i in range(0, len(win_pair_list), 2):
-            collect_players = win_pair_list[i][0], win_pair_list[i][1], \
-                              win_pair_list[i+1][0], win_pair_list[i+1][1]
-            pair.append(collect_players)
-        return pair
+    if len(wpair_list) % 2 == 0:
+        for i in range(0, len(wpair_list), 2):
+            players = wpair_list[i][0], wpair_list[i][1], \
+                              wpair_list[i+1][0], wpair_list[i+1][1]
+            pair.append(players)
+        return swisspair
 
     else:
-        print "There are an uneven number of players in the tournament"
+        print "Odd number of players,can't pair"
 
     db_connect.close()
